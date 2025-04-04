@@ -4,23 +4,27 @@ A Rust-based Telnet client designed for the Meow box challenge on Hack The Box. 
 
 ## Features
 
-- Connects to Telnet services
-- Handles connection timeouts
-- Attempts unauthenticated login
-- Executes basic commands
-- Graceful error handling
-- Buffer management for responses
+- Automated Telnet connection and authentication
+- Comprehensive system enumeration
+- Multiple flag location checks
+- Interesting file discovery
+- Network and process information gathering
+- Robust error handling and connection verification
+- Buffer management for large responses
+- Command retry mechanism
 
 ## Prerequisites
 
 - Rust installed on your system
 - Network access to the target machine
+- Basic understanding of penetration testing concepts
 
-## Usage
+## Installation
 
-1. Update the target IP in `main.rs`:
-```rust
-let target = "10.10.10.10:23"; // Replace with actual target IP
+1. Clone the repository:
+```bash
+git clone https://github.com/ArsCodeAmatoria/archon.git
+cd archon
 ```
 
 2. Compile the program:
@@ -28,19 +32,52 @@ let target = "10.10.10.10:23"; // Replace with actual target IP
 rustc main.rs
 ```
 
-3. Run the program:
+## Usage
+
+Run the program with target IP and port:
 ```bash
-./main
+./main <target_ip> <port>
 ```
 
-## Code Structure
+Example:
+```bash
+./main 10.10.10.10 23
+```
 
-The program follows this sequence:
-1. Establishes connection to target
-2. Reads and displays Telnet banner
-3. Attempts login with empty credentials
-4. Executes basic commands
-5. Attempts to read flag file
+## Features Breakdown
+
+### System Enumeration
+- User information (`whoami`, `id`)
+- System information (`uname -a`, `cat /proc/version`)
+- Directory listings (`ls -la /`, `ls -la /root`)
+- Network information (`netstat -tuln`, `ifconfig`)
+- Process information (`ps aux`)
+- System files (`/etc/passwd`, `/etc/shadow`)
+
+### Flag Search
+Automatically checks multiple locations:
+- `/flag.txt`
+- `/root/flag.txt`
+- `/root/root.txt`
+- `/home/user/flag.txt`
+- And more backup/alternative locations
+
+### File Discovery
+Searches for files matching patterns:
+- `*flag*`
+- `*root*`
+- `*user*`
+- `*.txt`
+
+### Interesting Files
+Checks common system and user files:
+- `/etc/passwd`
+- `/etc/shadow`
+- `/etc/hosts`
+- `/etc/issue`
+- `/etc/motd`
+- `/root/.bash_history`
+- `/root/.ssh/authorized_keys`
 
 ## Error Handling
 
@@ -49,6 +86,8 @@ The program includes comprehensive error handling for:
 - Read/write timeouts
 - Invalid responses
 - Network issues
+- Connection verification
+- Command execution failures
 
 ## Security Note
 
